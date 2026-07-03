@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openhack-cli"
+version = "0.1.0"
+description = "Command-line interface for the OpenHack security platform."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "OpenHack" }]
+keywords = ["openhack", "security", "pentest", "cli", "sast"]
+dependencies = [
+    "click>=8.1",
+    "requests>=2.31",
+    "rich>=13.7",
+]
+
+[project.urls]
+Homepage = "https://openhack.com"
+
+[project.scripts]
+openhack-cli = "openhack_cli.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["openhack_cli*"]
