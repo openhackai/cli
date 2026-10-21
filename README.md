@@ -66,7 +66,7 @@ openhack-cli auth logout         # remove local credentials
 | `auth` | `login`, `logout`, `status`/`whoami`, `token` | Manage credentials |
 | `orgs` | `list`, `use <id\|slug>` | List / select organizations |
 | `projects` | `list`, `get`, `use`, `create` | Manage projects |
-| `scans` | `list`, `get <scan_id>`, `trigger-full` | View / trigger scans |
+| `scans` | `list`, `get <scan_id>`, `trigger-full`, `cancel <scan_id>` | View, trigger, and cancel scans |
 | `vulns` | `list`, `groups`, `report`, `get`, `edit` | View, report, and edit project vulnerabilities |
 | `pentest` | `list`, `get`, `create` | Pentesting engagements |
 | `pentest findings` | `[engagement]` | Findings in an engagement (defaults to latest) |

@@ -36,7 +36,9 @@ STATUS_COLORS = {
     "pending": "yellow",
     "draft": "dim",
     "failed": "red",
-    "cancelled": "red",
+    # A deliberate cancel is not a failure — the dashboard renders it muted, so
+    # don't colour it like an error here either.
+    "cancelled": "dim",
 }
 
 

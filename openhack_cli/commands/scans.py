@@ -123,6 +123,45 @@ def get_scan(ctx: click.Context, scan_id: str, project: str | None,
     output.emit(ctx.obj, data, render)
 
 
+@scans.command(name="cancel")
+@click.argument("scan_id")
+@click.option("--project", default=None, help="Project id (defaults to active).")
+@click.option("--yes", "-y", is_flag=True,
+              help="Skip the confirmation prompt.")
+@click.pass_context
+def cancel_scan(ctx: click.Context, scan_id: str, project: str | None,
+                yes: bool) -> None:
+    """Cancel a running or pending scan.
+
+    Stops the underlying workflow and marks the scan cancelled. Scans that
+    already finished cannot be cancelled.
+    """
+    project_id = resolve_project_id(ctx, project)
+
+    # Prompt on an interactive run, but never when scripting: --json is the
+    # machine-readable mode and a hidden prompt would hang it.
+    if not yes and not ctx.obj.get("json"):
+        click.confirm(f"Cancel scan {scan_id}?", abort=True)
+
+    client = get_client(ctx)
+    data = client.post(f"/api/projects/{project_id}/scans/{scan_id}/cancel", json={})
+
+    def render(payload):
+        scan = payload.get("scan", {}) if isinstance(payload, dict) else {}
+        # The workflow may already have been gone — the scan is still marked
+        # cancelled, so report which actually happened rather than implying we
+        # stopped something that was still running.
+        if payload.get("workflow_cancelled") is False:
+            output.success("Scan marked cancelled (it was no longer running).")
+        else:
+            output.success("Scan cancelled.")
+        if scan.get("number") is not None:
+            output.console.print(f"  Scan:   #{scan['number']}")
+        output.console.print(f"  Status: {scan.get('scanStatus', 'cancelled')}")
+
+    output.emit(ctx.obj, data, render)
+
+
 @scans.command(name="trigger-full")
 @click.argument("project", required=False)
 @click.option("--branch", default=None,
