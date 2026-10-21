@@ -127,11 +127,16 @@ openhack-cli --json projects create --name "My App" [--slug my-app] [--org <orgI
 openhack-cli --json scans list [<projectId>] [--limit 20] [--offset 0]
 openhack-cli --json scans get <scanId> [--project <projectId>] [--findings/--no-findings]
 openhack-cli --json scans trigger-full [<projectId>] [--branch main]
+openhack-cli --json scans cancel <scanId> [--project <projectId>] [--yes]
 ```
 
 `scans list --json` returns `{ "scans": [...], "consolidatedCounts": {...},
 "pagination": {...} }`; each scan carries `scanStatus`, per-severity counts, and a
 `findings` array. `scans get` includes the full per-finding breakdown.
+
+`scans cancel` stops a pending or running scan. Interactive output asks for
+confirmation unless `--yes` is passed; `--json` never prompts, so automation
+cannot hang waiting for hidden input. A completed scan cannot be cancelled.
 
 ---
 
